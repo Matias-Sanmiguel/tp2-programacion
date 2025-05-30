@@ -1,5 +1,6 @@
 package modelo;
 
+import interfaces.IArbol;
 import interfaces.INodo;
 
 public class Arbol implements IArbol {
@@ -17,9 +18,9 @@ public class Arbol implements IArbol {
 		if(nodo==null) {
 			return new Nodo(dato);
 		}
-		if (dato<nodo.getDato()) {
+		if (dato < nodo.getDato().getDni()) {
 			nodo.setIzquierdo(insertarRec(nodo.getIzquierdo(),dato));
-		}else if (dato>nodo.getDato()) {
+		}else if (dato>nodo.getDato().getDni()) {
 			nodo.setDerecho(insertarRec(nodo.getDerecho(),dato));
 		}
 		return nodo;
@@ -28,10 +29,10 @@ public class Arbol implements IArbol {
 		return buscarRec(raiz,dato);
 	}
 	private INodo buscarRec(INodo nodo,int dato) {
-		if(nodo==null||nodo.getDato()==dato) {
+		if(nodo==null||nodo.getDato().getDni()==dato) {
 			return nodo;
 		}
-		if (dato<nodo.getDato()) {
+		if (dato<nodo.getDato().getDni()) {
 			return buscarRec(nodo.getIzquierdo(),dato);
 		}else {
 			return buscarRec(nodo.getDerecho(),dato);
@@ -56,7 +57,7 @@ public class Arbol implements IArbol {
 	private void preorderRec(INodo nodo) {
 		if(nodo!=null) {
 			System.out.print(nodo.getDato()+" ");
-			preorderRec(nodo.Izquierdo());
+			preorderRec(nodo.getIzquierdo());
 			preorderRec(nodo.getDerecho());
 		}
 	}
@@ -72,5 +73,40 @@ public class Arbol implements IArbol {
 			System.out.print(nodo.getDato()+" ");
 		}
 	}
-	}
+	public void eliminar(int dato) {
+        raiz = eliminarRec(raiz, dato);
+    }
+
+    private INodo eliminarRec(INodo nodo, int dato) {
+        if (nodo == null) return null;
+
+        if (dato < nodo.getDato().getDni()) {
+            nodo.setIzquierdo(eliminarRec(nodo.getIzquierdo(), dato));
+        } else if (dato > nodo.getDato().getDni()) {
+            nodo.setDerecho(eliminarRec(nodo.getDerecho(), dato));
+        } else {
+            // encontramos el nodo
+            if (nodo.getIzquierdo() == null && nodo.getDerecho() == null) {
+                return null; 
+            } else if (nodo.getIzquierdo() == null) {
+                return nodo.getDerecho(); 
+            } else if (nodo.getDerecho() == null) {
+                return nodo.getIzquierdo(); 
+            } else {
+               
+                INodo sucesor = encontrarMin(nodo.getDerecho());
+                nodo.setDato(sucesor.getDato());
+                nodo.setDerecho(eliminarRec(nodo.getDerecho(), sucesor.getDato().getDni()));
+            }
+        }
+        return nodo;
+    }
+
+    private INodo encontrarMin(INodo nodo) {
+        while (nodo.getIzquierdo() != null) {
+            nodo = nodo.getIzquierdo();
+        }
+        return nodo;
+    }
+}
 

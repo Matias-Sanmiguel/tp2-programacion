@@ -1,9 +1,8 @@
 package interfaces;
+import modelo.ComparadorPersona;
 
-import modelo.Persona;
-
-public class ICompararPorDNI implements ComparadorPersona {
-    public int comparar(Persona a, Persona b) {
+public class ICompararPorDNI extends ComparadorPersona {
+    public int comparar(IPersona a, IPersona b) {
         return Integer.compare(a.getDni(), b.getDni());
     }
 }

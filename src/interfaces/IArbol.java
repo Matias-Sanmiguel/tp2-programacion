@@ -1,4 +1,4 @@
-package modelo;
+package interfaces;
 
 public interface IArbol {
     void insertar(int dato);

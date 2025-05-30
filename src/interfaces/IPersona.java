@@ -11,3 +11,4 @@ public interface IPersona {
 
     public void setNombre(String nombre);
 }
+
